@@ -32,6 +32,8 @@ public class AppTest
         ChromeOptions options = new ChromeOptions();
         options.addArguments("headless");
         options.addArguments("window-size=1200x600");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
         WebDriver webDriver = new ChromeDriver(options);
         webDriver.get("https://www.google.co.id/");
         webDriver.findElement(By.name("q")).sendKeys("argo");
