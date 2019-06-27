@@ -6,14 +6,15 @@ import static org.hamcrest.core.Every.everyItem;
 import static org.junit.Assert.assertTrue;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,12 @@ public class AppTest
         List<WebElement> searchSuggestion =webDriver.findElements(By.xpath("//li[@class=\"sbct\"]//div[@class=\"sbl1\"]"));
         List<String> textSearchSuggestion = searchSuggestion.stream().map(webElement -> webElement.getText().toLowerCase()).filter(s -> s.length() > 1).collect(Collectors.toList());
         System.out.println(textSearchSuggestion.toString());
+        File src= ((TakesScreenshot)webDriver).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(src, new File(System.getProperty("user.dir")+"/"+System.currentTimeMillis()+".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         assertThat("Argo is not found " , textSearchSuggestion ,everyItem(containsString("argo")));
         webDriver.close();
     }
